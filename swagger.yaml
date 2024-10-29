@@ -17,23 +17,20 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - name
-                - date
               properties:
                 name:
                   type: string
-                  description: Name of the event (2-100 characters)
-                  example: Team Meeting
+                  description: The name of the event
+                  example: Annual Meeting
                 description:
                   type: string
-                  description: Description of the event (max 500 characters)
-                  example: Discuss project progress and next steps.
+                  description: The event description
+                  example: Discussing the annual results.
                 date:
                   type: string
-                  format: date
-                  description: Date of the event (must be future date)
-                  example: '2024-10-20'
+                  format: date-time
+                  description: The date of the event (YYYY-MM-DD)
+                  example: '2024-12-01'
       responses:
         '201':
           description: Event created successfully
@@ -56,7 +53,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     get:
       summary: Retrieve all events
       tags:
@@ -104,7 +113,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     put:
       summary: Update an event by ID
       tags:
@@ -118,17 +139,17 @@ paths:
               properties:
                 name:
                   type: string
-                  description: Name of the event (2-100 characters)
-                  example: Updated Team Meeting
+                  description: The name of the event
+                  example: Updated Meeting
                 description:
                   type: string
-                  description: Description of the event (max 500 characters)
-                  example: Updated description of the event.
+                  description: The event description
+                  example: Discussing the updated results.
                 date:
                   type: string
-                  format: date
-                  description: Date of the event (must be future date)
-                  example: '2024-10-21'
+                  format: date-time
+                  description: The date of the event (YYYY-MM-DD)
+                  example: '2024-12-05'
       responses:
         '200':
           description: Event updated successfully
@@ -151,7 +172,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     delete:
       summary: Delete an event by ID
       tags:
@@ -169,33 +202,51 @@ paths:
                   error:
                     type: string
                     example: Event not found
-        '422':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
   /events/{id}/tasks:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        description: ID of the event
-        schema:
-          type: integer
     get:
       summary: Retrieve all tasks for a specific event
       tags:
         - Events
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the event
+          schema:
+            type: integer
       responses:
         '200':
-          description: A list of tasks associated with the event
+          description: A list of tasks for the event
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The unique identifier for the task
+                    eventId:
+                      type: integer
+                      description: The ID of the associated event
+                    name:
+                      type: string
+                      description: The name of the task
+                    description:
+                      type: string
+                      description: A description of the task
+                    dueDate:
+                      type: string
+                      format: date-time
+                      description: The due date of the task
+                    status:
+                      type: string
+                      description: The status of the task
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: The creation timestamp
         '404':
           description: Event not found
           content:
@@ -211,7 +262,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
   /tasks:
     post:
       summary: Create a new task
@@ -226,21 +289,21 @@ paths:
               properties:
                 eventId:
                   type: integer
-                  description: ID of the associated event
+                  description: The ID of the associated event
                   example: 1
                 name:
                   type: string
-                  description: Name of the task
-                  example: Design Mockup
+                  description: The name of the task
+                  example: Prepare presentation
                 description:
                   type: string
-                  description: Description of the task
-                  example: Create a design mockup for the new feature.
+                  description: A description of the task
+                  example: Create slides for the meeting.
                 dueDate:
                   type: string
-                  format: date
-                  description: Due date of the task
-                  example: '2024-10-25'
+                  format: date-time
+                  description: The due date of the task (YYYY-MM-DD)
+                  example: '2024-12-01'
       responses:
         '201':
           description: Task created successfully
@@ -263,7 +326,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     get:
       summary: Retrieve all tasks
       tags:
@@ -311,7 +386,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     put:
       summary: Update a task by ID
       tags:
@@ -325,17 +412,21 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Updated Design Mockup
+                  description: The name of the task
+                  example: Update presentation
                 description:
                   type: string
-                  example: Updated description of the task.
+                  description: A description of the task
+                  example: Update slides based on feedback.
                 dueDate:
                   type: string
-                  format: date
-                  example: '2024-10-30'
+                  format: date-time
+                  description: The due date of the task (YYYY-MM-DD)
+                  example: '2024-12-05'
                 status:
                   type: string
-                  example: In Progress
+                  description: The status of the task
+                  example: in-progress
       responses:
         '200':
           description: Task updated successfully
@@ -358,7 +449,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
     delete:
       summary: Delete a task by ID
       tags:
@@ -381,28 +484,45 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
   /tasks/{id}/updates:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        description: ID of the task
-        schema:
-          type: integer
     get:
       summary: Retrieve all updates for a specific task
       tags:
         - Tasks
       responses:
         '200':
-          description: A list of updates associated with the task
+          description: A list of updates for the task
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TaskUpdate'
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    taskId:
+                      type: integer
+                    content:
+                      type: string
+                      description: The content of the update
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: The creation timestamp of the update
         '404':
           description: Task not found
           content:
@@ -418,7 +538,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
   /task-updates:
     post:
       summary: Create a new task update
@@ -586,8 +718,8 @@ components:
           description: A description of the event
         date:
           type: string
-          format: date
-          description: The date of the event
+          format: date-time
+          description: The date and time of the event
         createdAt:
           type: string
           format: date-time
@@ -607,13 +739,13 @@ components:
         description:
           type: string
           description: A description of the task
-        status:
-          type: string
-          description: The current status of the task
         dueDate:
           type: string
-          format: date
+          format: date-time
           description: The due date of the task
+        status:
+          type: string
+          description: The status of the task
         createdAt:
           type: string
           format: date-time
@@ -637,5 +769,7 @@ components:
 tags:
   - name: Events
     description: API endpoints for managing events
+  - name: Tasks
+    description: API endpoints for managing tasks
   - name: Task Updates
     description: API endpoints for managing task updates

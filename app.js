@@ -1,17 +1,20 @@
 const express = require('express');
-const sequelize = require('./config/database');
-const eventRoutes = require('./routes/eventRoutes');
-const taskRoutes = require('./routes/taskRoutes');
-const taskUpdateRoutes = require('./routes/taskUpdateRoutes');
+const { PrismaClient } = require('@prisma/client'); // Import Prisma Client
+const eventRoutes = require('./routes/events');
+const taskRoutes = require('./routes/tasks');
+const taskUpdateRoutes = require('./routes/taskupdates');
 const swaggerSetup = require('./swagger');
 
-
 const app = express();
+const prisma = new PrismaClient();
 
 app.use(express.json());
 swaggerSetup(app);
 
-sequelize.sync();
+app.use((req, res, next) => {
+  req.prisma = prisma;
+  next();
+});
 
 app.use('/api/events', eventRoutes);
 app.use('/api/tasks', taskRoutes);

@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  date        DateTime @db.Date
+  createdAt   DateTime @default(now())
+  tasks       Task[]   @relation("EventTasks")
+
+  @@map("events")
+}
+
+model Task {
+  id          Int          @id @default(autoincrement())
+  eventId     Int
+  name        String
+  description String?
+  status      String       @default("To Do")
+  dueDate     DateTime?    @db.Date
+  createdAt   DateTime     @default(now())
+  updates     TaskUpdate[] @relation("TaskUpdates")
+  event       Event        @relation("EventTasks", fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}
+
+model TaskUpdate {
+  id         Int      @id @default(autoincrement())
+  taskId     Int
+  updateText String
+  updatedAt  DateTime @default(now())
+  task       Task     @relation("TaskUpdates", fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("task_updates")
+}
