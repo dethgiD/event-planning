@@ -14,8 +14,6 @@ model Event {
   date        DateTime @db.Date
   createdAt   DateTime @default(now())
   tasks       Task[]   @relation("EventTasks")
-
-  @@map("events")
 }
 
 model Task {
@@ -26,10 +24,8 @@ model Task {
   status      String       @default("To Do")
   dueDate     DateTime?    @db.Date
   createdAt   DateTime     @default(now())
-  updates     TaskUpdate[] @relation("TaskUpdates")
   event       Event        @relation("EventTasks", fields: [eventId], references: [id], onDelete: Cascade)
-
-  @@map("tasks")
+  updates     TaskUpdate[] @relation("TaskUpdates")
 }
 
 model TaskUpdate {
@@ -38,6 +34,4 @@ model TaskUpdate {
   updateText String
   updatedAt  DateTime @default(now())
   task       Task     @relation("TaskUpdates", fields: [taskId], references: [id], onDelete: Cascade)
-
-  @@map("task_updates")
 }
