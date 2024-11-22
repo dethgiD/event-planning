@@ -20,7 +20,7 @@ const generateToken = (user) => {
         id: user.id,
         role: user.role,
     };
-    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5m" });
 };
 
 // Verify a JWT token
@@ -41,6 +41,16 @@ const createUser = async (data) => {
     return await prisma.user.create({ data });
 };
 
+// Generate a Refresh JWT token
+const generateRefreshToken = (user) => {
+  const payload = {
+      userId: user.id,
+      role: user.role
+  };
+
+  return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+};
+
 // Renew token
 const renewAccessToken = async (refreshToken) => {
     if (!refreshToken) {
@@ -55,11 +65,7 @@ const renewAccessToken = async (refreshToken) => {
         throw new Error('User not found');
       }
   
-      const newAccessToken = jwt.sign(
-        { userId: user.id, role: user.role },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m' }
-      );
+      const newAccessToken=generateToken(user);
   
       return newAccessToken;
     } catch (err) {
@@ -75,4 +81,5 @@ module.exports = {
     findUserByEmail,
     createUser,
     renewAccessToken,
+    generateRefreshToken
 };

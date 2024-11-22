@@ -8,6 +8,11 @@ const createTask = async (req, res) => {
   
     // Check if the event exists
     const event = await prisma.event.findUnique({ where: { id: eventId } });
+
+    // Check if user is the event owner
+    if (req.user.role !== 'ADMIN' || event.userId !== req.user.id) {
+      return res.status(403).json({ error: 'You are not authorized to access this event' });
+    }
   
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });

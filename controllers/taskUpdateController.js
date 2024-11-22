@@ -12,6 +12,10 @@ const createTaskUpdate = async (req, res) => {
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
+
+    if (req.user.role !== 'ADMIN' || task.userId !== req.user.id) {
+      return res.status(403).json({ error: 'You are not authorized to access this event' });
+    }
   
     try {
       const taskUpdate = await prisma.taskUpdate.create({
