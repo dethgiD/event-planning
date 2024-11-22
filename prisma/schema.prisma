@@ -14,6 +14,8 @@ model Event {
   date        DateTime @db.Date
   createdAt   DateTime @default(now())
   tasks       Task[]   @relation("EventTasks")
+  userId      Int
+  user        User     @relation("UserEvents", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Task {
@@ -26,6 +28,8 @@ model Task {
   createdAt   DateTime     @default(now())
   event       Event        @relation("EventTasks", fields: [eventId], references: [id], onDelete: Cascade)
   updates     TaskUpdate[] @relation("TaskUpdates")
+  userId      Int
+  user        User     @relation("UserTasks", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model TaskUpdate {
@@ -34,4 +38,24 @@ model TaskUpdate {
   updateText String
   updatedAt  DateTime @default(now())
   task       Task     @relation("TaskUpdates", fields: [taskId], references: [id], onDelete: Cascade)
+  userId      Int
+  user        User     @relation("UserTaskUpdates", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]  @relation("UserEvents")
+  tasks     Task[]   @relation("UserTasks")
+  taskUpdates TaskUpdate[] @relation("UserTaskUpdates")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
