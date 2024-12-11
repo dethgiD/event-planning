@@ -25,9 +25,6 @@ Renginių organizavimas apima daugybę užduočių, kurios turi būti paskirstyt
     - **Nariai** gali kurti renginius, valdyti užduotis ir skelbti atnaujinimus.
     - **Administratoriai** turi visišką kontrolę renginių, užduočių ir vartotojų valdymo srityse.
 
-5. **Užduočių priklausomybė ir perskirstymas**:
-    - Organizatoriai gali perskirstyti užduotis kitiems nariams, jei reikia, ir užduotys gali turėti priklausomybę, kuri paveiktų jų vykdymo tvarką.
-
 ### Naudojamos technologijos
 Front-end: React.js
 Back-end: Express.js
