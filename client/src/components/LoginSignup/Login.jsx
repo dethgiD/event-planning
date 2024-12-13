@@ -9,7 +9,7 @@ import email_icon from '../../assets/email.svg'
 import password_icon from '../../assets/password.svg'
 
 export default function Login(){
-    const api = 'http://localhost:3000/api/auth/login';
+    const api = 'https://event-planning-l5he.onrender.com/api/auth/login';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 

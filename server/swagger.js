@@ -14,7 +14,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000/api', // Replace with your actual base URL
+      url: 'https://event-planning-l5he.onrender.com/api', // Replace with your actual base URL
     },
   ],
 };

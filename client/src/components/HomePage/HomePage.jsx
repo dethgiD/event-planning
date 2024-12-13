@@ -4,7 +4,7 @@ import "./cards.css";
 import Header from "./Header";
 import CreateEditModal from "./CreateEditModal";
 
-const api = "http://localhost:3000/api/events/";
+const api = "https://event-planning-l5he.onrender.com/api/events/";
 
 export default function HomePage() {
     const [events, setEvents] = useState([]);
