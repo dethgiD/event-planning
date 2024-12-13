@@ -34,17 +34,6 @@ app.use('/api/events', authenticate, authorize(['USER', 'ADMIN']), eventRoutes);
 app.use('/api/tasks', authenticate, authorize(['USER', 'ADMIN']), taskRoutes);
 app.use('/api/task-updates', authenticate, authorize(['USER', 'ADMIN']), taskUpdateRoutes);
 
-// Serve React static files in production
-if (process.env.NODE_ENV === 'production') {
-  const clientBuildPath = path.join(__dirname, 'client/build');
-  app.use(express.static(clientBuildPath));
-
-  // Serve React's index.html for unknown routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
-}
-
 // Handle undefined API routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
