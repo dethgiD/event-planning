@@ -14,7 +14,7 @@ const cors = require('cors');
 
 app.use(express.json()); // Middleware for parsing JSON
 app.use(cors({
-  origin: 'https://event-planning-frontend-94i2.onrender.com/', // Frontend's origin
+  origin: 'https://event-planning-frontend-94i2.onrender.com', // Frontend's origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   credentials: true, // Allow credentials like cookies
 }));
